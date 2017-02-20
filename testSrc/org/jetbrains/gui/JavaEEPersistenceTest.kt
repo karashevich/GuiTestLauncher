@@ -3,6 +3,8 @@ package org.jetbrains.gui
 import org.jetbrains.gui.GuiTestLauncher.createArgs
 import org.jetbrains.gui.download.IdeDownloader
 import org.jetbrains.gui.file.PathManager
+import org.jetbrains.gui.ide.Ide
+import org.jetbrains.gui.ide.IdeType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -18,7 +20,7 @@ import java.util.stream.Collectors
 
 class JavaEEPersistenceTest {
 
-    val ide = IdeDownloader.Ide(ideType = IdeDownloader.IdeType.IDEA_COMMUNITY, version = 171, build = 3085)
+    val ide = Ide(ideType = IdeType.IDEA_COMMUNITY, version = 171, build = 3085)
     var pathToSave: String? = null
 
     @BeforeEach
@@ -34,7 +36,7 @@ class JavaEEPersistenceTest {
     @Test
     fun testRunIdea() {
         val runnable: () -> Unit = {
-            val ideaStartTest = ProcessBuilder().inheritIO().command(createArgs(ideaLibPath = "$pathToSave${File.separator}lib",
+            val ideaStartTest = ProcessBuilder().inheritIO().command(createArgs(ideaLibPath = PathManager.getSystemSpecificIdeLibPath(pathToSave!!),
                     testClass = "com.intellij.testGuiFramework.tests.JavaEEProjectTest",
                     testClassPath = "/Users/jetbrains/IdeaProjects/idea-ultimate/out/classes/test/javaee_tests/"))
             val process = ideaStartTest.start()

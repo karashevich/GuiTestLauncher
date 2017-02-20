@@ -4,6 +4,9 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.jetbrains.gui.file.FileUtils
 import org.jetbrains.gui.file.PathManager
+import org.jetbrains.gui.file.PathManager.getSystemSpecificIdeLibPath
+import org.jetbrains.gui.ide.Ide
+import org.jetbrains.gui.ide.IdeType
 import org.jetbrains.gui.system.SystemInfo
 import org.jetbrains.gui.teamcity.TeamCityManager.baseUrl
 import org.jetbrains.gui.teamcity.TeamCityManager.guestAuth
@@ -20,14 +23,6 @@ import java.nio.channels.Channels
 object IdeDownloader {
 
     val LOG: Logger = LogManager.getLogger(IdeDownloader::class)
-
-
-    //http://buildserver.labs.intellij.net/repository/download/ijplatform_master_Idea_Installers/15871054:id/ideaIC-171.3085.dmg
-
-    enum class IdeType(val id: String, val buildTypeExtId: String){
-        IDEA_COMMUNITY("IdeaIC", "ijplatform_master_Idea_Installers"),
-        IDEA_ULTIMATE("IdeaIU", "ijplatform_master_Idea_Installers")
-    }
 
     val buildArtifactPath = "-{build.number}"
     val unscramblePath = "unscrambled/idea.jar"
@@ -54,18 +49,16 @@ object IdeDownloader {
         LOG.info("unpacking done")
     }
 
-    fun unscramble(ide: Ide, ideDir: String) {
-        val pathToFile = "$ideDir${File.separator}idea.jar"
+    fun unscramble(ide: Ide, workDir: String) {
+        val pathToFile = "$workDir${File.separator}idea.jar"
         LOG.info("unscrambling $pathToFile")
         download(buildUnscrambleUrl(ide), pathToFile)
-        FileUtils.copy(from = pathToFile, to = "$ideDir${File.separator}lib${File.separator}idea.jar")
+        FileUtils.copy(from = pathToFile, to = "${getSystemSpecificIdeLibPath(workDir)}${File.separator}idea.jar")
         LOG.info("unscrambling done")
     }
 
     fun buildUrl(ide: Ide, extension: String = "zip"): URL = URL("$baseUrl/$guestAuth/${ide.ideType.buildTypeExtId}/${ide.version}.${ide.build}/${ide.ideType.id}$buildArtifactPath.$extension")
     fun buildUnscrambleUrl(ide: Ide): URL = URL("$baseUrl/$guestAuth/${ide.ideType.buildTypeExtId}/${ide.version}.${ide.build}/$unscramblePath")
-
-    data class Ide(val ideType : IdeType, val version: Int, val build: Int)
 
     @JvmStatic
     fun main(args: Array<String>) {

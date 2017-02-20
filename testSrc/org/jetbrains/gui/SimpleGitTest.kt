@@ -1,13 +1,13 @@
 package org.jetbrains.gui
 
 import org.jetbrains.gui.GuiTestLauncher.createArgs
-import org.jetbrains.gui.download.IdeDownloader
 import org.jetbrains.gui.file.PathManager
+import org.jetbrains.gui.ide.Ide
+import org.jetbrains.gui.ide.IdeType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.BufferedReader
-import java.io.File
 import java.io.InputStreamReader
 import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
@@ -18,8 +18,11 @@ import java.util.stream.Collectors
 
 class SimpleGitTest {
 
-    val ide = IdeDownloader.Ide(ideType = IdeDownloader.IdeType.IDEA_COMMUNITY, version = 171, build = 3085)
+    val ide = Ide(ideType = IdeType.IDEA_COMMUNITY, version = 171, build = 3085)
     var pathToSave: String? = null
+
+    val simpleGitTestClass = "com.intellij.testGuiFramework.tests.SimpleGitTest"
+    val simpleGitTestClassPath = "/Users/jetbrains/IdeaProjects/temp/tests/"
 
     @BeforeEach
     internal fun setUp() {
@@ -34,7 +37,12 @@ class SimpleGitTest {
     @Test
     fun testGit() {
         val runnable: () -> Unit = {
-            val ideaStartTest = ProcessBuilder().inheritIO().command(createArgs(ideaLibPath = "$pathToSave${File.separator}lib"))
+            val ideaStartTest = ProcessBuilder()
+                    .inheritIO()
+                    .command(createArgs(
+                            ideaLibPath = PathManager.getSystemSpecificIdeLibPath(pathToSave!!),
+                            testClass = simpleGitTestClass,
+                            testClassPath = simpleGitTestClassPath))
             val process = ideaStartTest.start()
             val wait = process.waitFor(600, TimeUnit.MINUTES)
             assert(wait)
@@ -48,4 +56,5 @@ class SimpleGitTest {
         val ideaTestThread = Thread(runnable, "IdeaTestThread")
         ideaTestThread.run()
     }
+
 }

@@ -18,6 +18,7 @@ object ZipUtils{
     fun extractSit(sitArchive: String, destination: String) {
         val processBuilder = ProcessBuilder().inheritIO().command("unzip", "-q", sitArchive, "-d", destination)
         val process = processBuilder.start()
+        process.waitFor()
         if (process.exitValue() == 1) {
             val errMessage = BufferedReader(InputStreamReader(process.errorStream)).lines().collect(Collectors.joining("\n"))
             System.err.println(errMessage)

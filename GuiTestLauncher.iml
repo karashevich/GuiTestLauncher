@@ -100,5 +100,6 @@
     </orderEntry>
     <orderEntry type="library" name="idea_rt" level="project" />
     <orderEntry type="library" name="log4j-api-2.8" level="project" />
+    <orderEntry type="library" name="fest-assert-1.5.0-SNAPSHOT" level="project" />
   </component>
 </module>

@@ -11,8 +11,9 @@
         </File>
     </Appenders>
     <Loggers>
-        <Root level="error">
+        <Root level="info">
             <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLog"/>
         </Root>
     </Loggers>
 </Configuration>
