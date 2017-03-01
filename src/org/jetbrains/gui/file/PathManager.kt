@@ -8,7 +8,7 @@ import java.io.File
  */
 object PathManager {
 
-    fun getWorkDirPath() = "/Users/jetbrains/IdeaProjects/temp"
+    fun getWorkDirPath() = "C:\\Users\\Sergey.Karashevich\\IdeaProjects\\temp"
 
     fun getSystemSpecificIdePath(workDir: String): String {
         when (SystemInfo.getSystemType()) {
@@ -26,4 +26,7 @@ object PathManager {
         val file = File(path)
         return file.path
     }
+
+    fun toSysSpecPath(unixStylePath: String) = if (SystemInfo.getSystemType() == SystemInfo.SystemType.WINDOWS) unixStylePath.replace("/", File.separator) else unixStylePath
+
 }

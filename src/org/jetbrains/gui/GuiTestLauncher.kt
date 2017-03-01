@@ -3,8 +3,8 @@ package org.jetbrains.gui
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.jetbrains.gui.classpath.ClassPathBuilder
-import org.jetbrains.gui.download.IdeDownloader
 import org.jetbrains.gui.file.PathManager
+import org.jetbrains.gui.file.PathManager.toSysSpecPath
 import org.jetbrains.gui.ide.Ide
 import org.jetbrains.gui.ide.IdeRunArgs
 import org.jetbrains.gui.ide.IdeTestFixture
@@ -28,22 +28,13 @@ import java.util.stream.Collectors
 
 object GuiTestLauncher {
 
-    val demoTestClass = "com.intellij.testGuiFramework.tests.SimpleGitTest"
-    val demoTestClassPath = "/Users/jetbrains/IdeaProjects/idea-ultimate/out/classes/test/git4idea/"
-
-    val JUNIT_STARTER = "com.intellij.rt.execution.junit.JUnitStarter"
+    val JUNIT_STARTER = "org.junit.runner.JUnitCore"
     val IDE_VERSION = "-ideVersion5"
 
-    val ideaLibPath = "$IDEA_PATH${File.separator}lib"
     val javaExec = "$JDK_PATH${File.separator}bin${File.separator}java"
-    val jUnitPath = "/Users/jetbrains/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/171.2601/IntelliJ IDEA 2017.1 EAP.app/Contents/plugins/junit/lib/junit-rt.jar"
+    val jUnitPath = "$IDEA_PATH${File.separator}${toSysSpecPath("plugins/junit/lib/junit-rt.jar")}"
     val SET_GUI_TEST_DATA_DIR = "-DGUI_TEST_DATA_DIR=$GUI_TEST_DATA_DIR"
     val SET_CUSTOM_CONFIG_PATH= "-DCUSTOM_CONFIG_PATH=${CUSTOM_CONFIG_PATH ?: ""}"
-
-    val jdkPath = "/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jbsdk/Contents/Home/"
-    val festLibPath = "/Users/jetbrains/IdeaProjects/GuiScriptRecorder/lib"
-    val testGuiFrameworkPath = "/Users/jetbrains/IdeaProjects/GuiScriptRecorder/lib/testGuiFramework-platform.jar"
-    val MY_PLATFORM_PREFIX = "-Didea.platform.prefix=Idea"
 
     val LOG: Logger = LogManager.getLogger(this.javaClass)
 
@@ -56,7 +47,7 @@ object GuiTestLauncher {
                 "-classpath",
                 classpath,
                 JUNIT_STARTER,
-                IDE_VERSION,
+//                IDE_VERSION,
                 testClass)
     }
 

@@ -42,7 +42,6 @@ class ClassPathBuilder(val ideaLibPath: String, val jdkPath: String, val jUnitPa
                 .buildOsSpecific()
     }
 
-
     private fun File.getFilesRecursive(): List<String> {
         if (this.isFile) return listOf(this.path)
         else return this.listFiles().map {file -> file.getFilesRecursive()}.flatten()

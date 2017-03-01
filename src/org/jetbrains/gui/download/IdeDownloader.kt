@@ -22,10 +22,10 @@ import java.nio.channels.Channels
  */
 object IdeDownloader {
 
-    val LOG: Logger = LogManager.getLogger(IdeDownloader::class)
+    val LOG: Logger = LogManager.getLogger(this.javaClass)
 
     val buildArtifactPath = "-{build.number}"
-    val unscramblePath = "unscrambled/idea.jar"
+    val unscramblePath = "unscrambled"
 
 
     fun download(url: URL, pathFile: String) {
@@ -34,6 +34,7 @@ object IdeDownloader {
         val fos = FileOutputStream(pathFile)
         fos.channel.transferFrom(rbc, 0, java.lang.Long.MAX_VALUE)
         LOG.info("downloading done")
+        fos.close()
     }
 
     fun unpack(pathFile: String) {
@@ -42,7 +43,7 @@ object IdeDownloader {
         val workDir = File(pathFile).parentFile
         when(SystemInfo.getSystemType()) {
 
-            SystemInfo.SystemType.WINDOWS -> ZipUtils.unzip(pathFile, workDir.path)
+            SystemInfo.SystemType.WINDOWS -> ZipUtils.installExe(pathFile, workDir.path)
             SystemInfo.SystemType.UNIX -> TODO()
             SystemInfo.SystemType.MAC -> ZipUtils.extractSit(pathFile, workDir.path)
         }
@@ -58,12 +59,12 @@ object IdeDownloader {
     }
 
     fun buildUrl(ide: Ide, extension: String = "zip"): URL = URL("$baseUrl/$guestAuth/${ide.ideType.buildTypeExtId}/${ide.version}.${ide.build}/${ide.ideType.id}$buildArtifactPath.$extension")
-    fun buildUnscrambleUrl(ide: Ide): URL = URL("$baseUrl/$guestAuth/${ide.ideType.buildTypeExtId}/${ide.version}.${ide.build}/$unscramblePath")
+    fun buildUnscrambleUrl(ide: Ide): URL = URL("$baseUrl/$guestAuth/${ide.ideType.buildTypeExtId}/${ide.version}.${ide.build}/$unscramblePath/${ide.ideType.ideJarName}")
 
     @JvmStatic
     fun main(args: Array<String>) {
-        val ext = SystemInfo.getExt()
         val ide = Ide(ideType = IdeType.IDEA_COMMUNITY, version = 171, build = 3085)
+        val ext = SystemInfo.getExt()
         val pathToSave = PathManager.getWorkDirPath()
         val path = "$pathToSave${File.separator}${ide.ideType.id}-${ide.version}.${ide.build}.$ext"
 

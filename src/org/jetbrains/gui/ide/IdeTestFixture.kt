@@ -27,6 +27,16 @@ class IdeTestFixture(val ide: Ide) {
         ideRunArgs.jvmParams.addAll(params)
     }
 
+    fun jvmConfig(vararg params: String) {
+        ideRunArgs.jvmParams.addAll(params.toList())
+    }
+
+    fun debug(transport: String = "dt_socket", server: Boolean = true, suspend: Boolean = true, port: Int) {
+        if (!ideRunArgs.jvmParams.contains("-Xdebug")) ideRunArgs.jvmParams.add("-Xdebug")
+        ideRunArgs.jvmParams.forEach { jvmParameter -> if (jvmParameter.startsWith("-Xrunjdwp:")) ideRunArgs.jvmParams.remove(jvmParameter)} //remove all debug specific params
+        ideRunArgs.jvmParams.add("-Xrunjdwp:transport=$transport,server=${if (server) "y" else "n"},suspend=${if (suspend) "y" else "n"},address=$port")
+    }
+
     fun installPlugin(pluginToInstall: String) {
         installPlugins(listOf(pluginToInstall))
     }

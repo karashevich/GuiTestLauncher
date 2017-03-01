@@ -17,9 +17,10 @@ class MultiDpiTest {
 
         multiDpiTest(testIde, 2.0f) {
             config("/Users/jetbrains/IdeaProjects/temp/config")
+            debug(port = 1044, suspend = false)
             test(testClassName = "com.intellij.testGuiFramework.tests.ScreenshotTest")
         }
 
-        DpiComparator.process(TODO("set path to screenshot dir"), TODO("add comparator here"))
+//        DpiComparator.process(TODO("set path to screenshot dir"), TODO("add comparator here"))
     }
 }
