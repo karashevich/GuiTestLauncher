@@ -1,10 +1,9 @@
 package org.jetbrains.gui
 
 import org.jetbrains.gui.GuiTestLauncher.multiDpiTest
-import org.jetbrains.gui.dpi.DpiComparator
 import org.jetbrains.gui.ide.Ide
 import org.jetbrains.gui.ide.IdeType
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 /**
  * @author Sergey Karashevich

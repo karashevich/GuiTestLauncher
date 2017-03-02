@@ -1,12 +1,11 @@
 package org.jetbrains.gui
 
+import junit.framework.Assert.fail
 import org.jetbrains.gui.GuiTestLauncher.createArgs
 import org.jetbrains.gui.file.PathManager
 import org.jetbrains.gui.ide.Ide
 import org.jetbrains.gui.ide.IdeType
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.concurrent.TimeUnit
@@ -24,15 +23,14 @@ class SimpleGitTest {
     val simpleGitTestClass = "com.intellij.testGuiFramework.tests.SimpleGitTest"
     val simpleGitTestClassPath = "/Users/jetbrains/IdeaProjects/temp/tests/"
 
-    @BeforeEach
-    internal fun setUp() {
-        pathToSave = PathManager.getWorkDirPath()
+//    internal fun setUp() {
+//        pathToSave = PathManager.getWorkDirPath()
 //        val path = "$pathToSave${File.separator}${ide.ideType.id}-${ide.version}.${ide.build}.zip"
 //
 //        IdeDownloader.download(IdeDownloader.buildUrl(ide), path)
 //        IdeDownloader.unpack(path)
 //        IdeDownloader.unscramble(ide, pathToSave!!)
-    }
+//    }
 
     @Test
     fun testGit() {
@@ -49,7 +47,7 @@ class SimpleGitTest {
             if (process.exitValue() != 1) println("Execution successful") else  {
                 val errMessage = BufferedReader(InputStreamReader(process.errorStream)).lines().collect(Collectors.joining("\n"))
                 System.err.println(errMessage)
-                Assertions.fail(errMessage)
+                fail(errMessage)
             }
         }
 

@@ -1,15 +1,12 @@
 package org.jetbrains.gui
 
+import junit.framework.Assert.fail
 import org.jetbrains.gui.GuiTestLauncher.createArgs
-import org.jetbrains.gui.download.IdeDownloader
 import org.jetbrains.gui.file.PathManager
 import org.jetbrains.gui.ide.Ide
 import org.jetbrains.gui.ide.IdeType
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import java.io.BufferedReader
-import java.io.File
 import java.io.InputStreamReader
 import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
@@ -23,15 +20,14 @@ class JavaEEPersistenceTest {
     val ide = Ide(ideType = IdeType.IDEA_COMMUNITY, version = 171, build = 3085)
     var pathToSave: String? = null
 
-    @BeforeEach
-    internal fun setUp() {
-        pathToSave = PathManager.getWorkDirPath()
+//    internal fun setUp() {
+//        pathToSave = PathManager.getWorkDirPath()
 //        val path = "$pathToSave${File.separator}${ide.ideType.id}-${ide.version}.${ide.build}.zip"
 //
 //        IdeDownloader.download(IdeDownloader.buildUrl(ide), path)
 //        IdeDownloader.unpack(path)
 //        IdeDownloader.unscramble(ide, pathToSave!!)
-    }
+//    }
 
     @Test
     fun testRunIdea() {
@@ -45,7 +41,7 @@ class JavaEEPersistenceTest {
             if (process.exitValue() != 1) println("Execution successful") else {
                 val errMessage = BufferedReader(InputStreamReader(process.errorStream)).lines().collect(Collectors.joining("\n"))
                 System.err.println(errMessage)
-                Assertions.fail(errMessage)
+                fail(errMessage)
             }
         }
 
