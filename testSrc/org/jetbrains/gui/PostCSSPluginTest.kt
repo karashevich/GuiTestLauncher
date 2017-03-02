@@ -1,11 +1,9 @@
 package org.jetbrains.gui
 
-import org.jetbrains.gui.download.IdeDownloader
 import org.jetbrains.gui.file.PathManager
 import org.jetbrains.gui.ide.Ide
 import org.jetbrains.gui.ide.IdeType
 import org.jetbrains.gui.system.SystemInfo
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.io.File
 
@@ -28,7 +26,6 @@ class PostCSSPluginTest {
 
     @Test
     fun testPluginInstall() {
-
         GuiTestLauncher.runIde(ide) {
             config("/Users/jetbrains/IdeaProjects/temp/config")
             installPlugin("PostCSS")
